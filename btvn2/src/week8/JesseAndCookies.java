@@ -1,4 +1,4 @@
-package week3;
+package week8;
 
 import java.io.*;
 import java.math.*;
@@ -6,39 +6,40 @@ import java.security.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.*;
 import java.util.regex.*;
-import java.util.stream.*;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 class Result {
 
     /*
-     * Complete the 'pairs' function below.
+     * Complete the 'cookies' function below.
      *
      * The function is expected to return an INTEGER.
      * The function accepts following parameters:
      *  1. INTEGER k
-     *  2. INTEGER_ARRAY arr
+     *  2. INTEGER_ARRAY A
      */
 
-    public static int pairs(int k, List<Integer> arr) {
+    public static int cookies(int k, List<Integer> A) {
         // Write your code here
-        Set<Integer> numberSet = new HashSet<>();
-        int count = 0;
-
-        for (int num : arr) {
-            if (numberSet.contains(num - k)) {
-                count++;
-            }
-            if (numberSet.contains(num + k)) {
-                count++;
-            }
-            numberSet.add(num);
+        int cnt = 0;
+        int N = A.size();
+        PriorityQueue<Integer> q = new PriorityQueue<>();
+        for (int i=0;i<N;i++){
+            q.add(A.get(i));
         }
 
-        return count;
+        while (!q.isEmpty() && q.peek() < k) {
+            int first = q.poll();
+            if (!q.isEmpty()) {
+                int second = q.poll();
+                q.offer(first + 2 * second);
+                cnt++;
+            } else {
+                return -1;
+            }
+        }
+
+        return cnt;
 
     }
 
@@ -55,11 +56,16 @@ public class Solution {
 
         int k = Integer.parseInt(firstMultipleInput[1]);
 
-        List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                .map(Integer::parseInt)
-                .collect(toList());
+        String[] ATemp = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
 
-        int result = Result.pairs(k, arr);
+        List<Integer> A = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int AItem = Integer.parseInt(ATemp[i]);
+            A.add(AItem);
+        }
+
+        int result = Result.cookies(k, A);
 
         bufferedWriter.write(String.valueOf(result));
         bufferedWriter.newLine();
@@ -68,4 +74,3 @@ public class Solution {
         bufferedWriter.close();
     }
 }
-

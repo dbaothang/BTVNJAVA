@@ -1,4 +1,5 @@
-package week3;
+package week7;
+
 import java.io.*;
 import java.math.*;
 import java.security.*;
@@ -14,40 +15,43 @@ import static java.util.stream.Collectors.toList;
 class Result {
 
     /*
-     * Complete the 'closestNumbers' function below.
+     * Complete the 'quickSort' function below.
      *
      * The function is expected to return an INTEGER_ARRAY.
      * The function accepts INTEGER_ARRAY arr as parameter.
      */
 
-    public static List<Integer> closestNumbers(List<Integer> arr) {
+    public static List<Integer> quickSort(List<Integer> arr) {
         // Write your code here
-        if (arr == null || arr.size() < 2) {
-            return new ArrayList<Integer>();
+        if (arr.size() <= 1) {
+            return arr;
         }
 
-        int minDifference = Integer.MAX_VALUE;
-        List<Integer> result = new ArrayList<Integer>();
+        int pivotIndex = 0;
+        int pivot = arr.get(pivotIndex);
 
-        Collections.sort(arr);
+        List<Integer> left = new ArrayList<>();
+        List<Integer> right = new ArrayList<>();
 
         for (int i = 1; i < arr.size(); i++) {
-            int currentDifference = Math.abs(arr.get(i) - arr.get(i - 1));
-
-            if (currentDifference < minDifference) {
-                minDifference = currentDifference;
-                result.clear();
-                result.add(arr.get(i - 1));
-                result.add(arr.get(i));
-            } else if (currentDifference == minDifference) {
-                result.add(arr.get(i - 1));
-                result.add(arr.get(i));
+            int current = arr.get(i);
+            if (current < pivot) {
+                left.add(current);
+            } else {
+                right.add(current);
             }
         }
 
-        return result;
+        List<Integer> sortedLeft = quickSort(left);
+        List<Integer> sortedRight = quickSort(right);
 
+        List<Integer> sortedArr = new ArrayList<>(sortedLeft);
+        sortedArr.add(pivot);
+        sortedArr.addAll(sortedRight);
+
+        return sortedArr;
     }
+
 
 }
 
@@ -62,7 +66,7 @@ public class Solution {
                 .map(Integer::parseInt)
                 .collect(toList());
 
-        List<Integer> result = Result.closestNumbers(arr);
+        List<Integer> result = Result.quickSort(arr);
 
         bufferedWriter.write(
                 result.stream()

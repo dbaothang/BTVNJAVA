@@ -1,4 +1,4 @@
-package week3;
+package week11;
 
 import java.io.*;
 import java.math.*;
@@ -25,21 +25,17 @@ class Result {
 
     public static int pairs(int k, List<Integer> arr) {
         // Write your code here
-        Set<Integer> numberSet = new HashSet<>();
-        int count = 0;
-
-        for (int num : arr) {
-            if (numberSet.contains(num - k)) {
-                count++;
-            }
-            if (numberSet.contains(num + k)) {
-                count++;
-            }
-            numberSet.add(num);
+        HashSet<Integer> set = new HashSet<>();
+        int sum = 0;
+        for (Integer x : arr){
+            set.add(x);
         }
-
-        return count;
-
+        for (Integer x : set){
+            if(set.contains(x+k)){
+                sum++;
+            }
+        }
+        return sum;
     }
 
 }
